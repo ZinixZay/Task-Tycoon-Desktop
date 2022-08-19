@@ -3,11 +3,17 @@ import sys
 import typing
 
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtGui import QFontDatabase, QFont, QPixmap, QCursor
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QFontDatabase, QFont, QPixmap, QCursor, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt5.uic import loadUi
 
 from db import *
+
+
+class SelectedUser:
+    def __init__(self, username):
+        self.username = username
 
 
 class Screens(QtWidgets.QStackedWidget):
@@ -24,17 +30,19 @@ class MenuScreen(QMainWindow):
 
         self.Stack = stack
 
-        self.label.setFont(QFont('Default_SC', 40))
+        self.submit_button.setIcon(QIcon('img/btn_submit.png'))
+        self.submit_button.setIconSize(QSize(100, 100))
+
+        self.label.setFont(QFont('Default_SC', 35))
 
 
 class LoginScreen(QMainWindow):
-    def __init__(self, stack, menu_label):
+    def __init__(self, stack):
         super(LoginScreen, self).__init__()
         loadUi("screens/login.ui", self)
         QFontDatabase.addApplicationFont('fonts/Default_SC.ttf')
 
-        self.Stack = stack
-        self.menu_label = menu_label
+        self.stack = stack
 
         self.login_input.setFont(QFont('Default_SC', 20))
 
@@ -51,7 +59,7 @@ class LoginScreen(QMainWindow):
     def sign_clicked(self) -> None:
 
         """
-        button trigger
+        sign in button trigger
         1. check input correctioness
         2.1. if not correct -> show error message
         2.2. if correct -> ...
@@ -63,17 +71,19 @@ class LoginScreen(QMainWindow):
         if not check_login_correctness(username, psw):
             show_critical_messagebox('Invalid username or password')
         else:
-            self.menu_label.setText(f"Welcome, {get_app_user_name(username).capitalize()}!")
-            stack_navigation(self.Stack, 1)
+            stack_navigation(self.stack, 1)
 
 
 def application() -> None:
+    global menu_screen
+    global login_screen
+
     app = QApplication(sys.argv)
 
     # Stacked widget and screen creation
     Stack = Screens()
     menu_screen = MenuScreen(Stack)
-    login_screen = LoginScreen(Stack, menu_screen.label)
+    login_screen = LoginScreen(Stack)
     Stack.setWindowTitle('Task Tycoon')
     Stack.setFixedSize(800, 600)
 
@@ -110,13 +120,21 @@ def show_critical_messagebox(text: str = 'blank') -> None:
 def stack_navigation(stack: Screens, step: int = 1) -> None:
 
     """
-    Changes the screen person sees
+    Changes the screen that person sees
     :param stack: Stacked widget which is going to be swiped
     :param step: Direction and mesaure of swiping
     :return: Nothing
     """
 
     stack.setCurrentIndex(stack.currentIndex() + step)
+
+    if stack.currentIndex() == 1:
+
+        username = login_screen.login_input.text()
+        capitalized_username = ' '.join([*map(lambda x: x.capitalize(), get_app_user_name(username).split())])
+        menu_screen.label.setText(f"Welcome, {capitalized_username}!")
+
+        menu_screen.task.addItems(get_task_titles(get_app_user_name(username)))
 
 
 if __name__ == "__main__":

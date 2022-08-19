@@ -30,6 +30,20 @@ border-color: rgb(32, 37, 42);
 background-color: rgb(28, 115, 100);
 color: rgb(204, 196, 180);
 }
+QLineEdit#login_input{
+	border: 5px solid;
+	border-radius: 20%;
+	border-color: rgb(32, 37, 42);
+	background-color: rgb(204, 196, 180);
+	color: rgb(44, 132, 116);
+}
+QLineEdit#password_input{
+	border: 5px solid;
+	border-radius: 20%;
+	border-color: rgb(32, 37, 42);
+	background-color: rgb(204, 196, 180);
+	color: rgb(44, 132, 116);
+}
 QPushButton:hover#sign_in_button
 {
    background-color:rgb(1,58,51);
@@ -40,6 +54,14 @@ QPushButton:pressed#sign_in_button
 }
 QLineEdit{
 	padding:10px;
+}
+QLineEdit:focus#login_input
+{
+  background-color: rgb(255,255,255);
+}
+QLineEdit:focus#password_input
+{
+  background-color: rgb(255,255,255);
 }</string>
    </property>
    <widget class="QPushButton" name="sign_in_button">
@@ -83,11 +105,7 @@ QLineEdit{
      <enum>Qt::LeftToRight</enum>
     </property>
     <property name="styleSheet">
-     <string notr="true">border: 5px solid;
-border-radius: 20%;
-border-color: rgb(32, 37, 42);
-background-color: rgb(204, 196, 180);
-color: rgb(44, 132, 116);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string/>
@@ -109,11 +127,7 @@ color: rgb(44, 132, 116);</string>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">border: 5px solid;
-border-radius: 20%;
-border-color: rgb(32, 37, 42);
-background-color: rgb(204, 196, 180);
-color: rgb(44, 132, 116);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string/>

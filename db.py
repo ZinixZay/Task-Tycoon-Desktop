@@ -25,14 +25,21 @@ def check_login_correctness(login, psw) -> bool:
 
     com = f"SELECT password FROM app_users WHERE login=('{login}')"
     cur.execute(com)
-    t_psw = cur.fetchall()
-    if len(t_psw) > 0:
-        if psw == t_psw[0][0]:
+    true_psw = cur.fetchall()
+    if true_psw:
+        if psw == true_psw[0][0]:
             return True
         else:
             return False
     else:
         return False
+
+
+def get_task_titles(creator: str) -> list:
+    com = f"SELECT var_name FROM variants WHERE creator=('{creator}')"
+    cur.execute(com)
+    titles = [title[0] for title in cur.fetchall()]
+    return titles
 
 
 def get_app_user_name(username: str) -> str:
