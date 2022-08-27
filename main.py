@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt5.uic import loadUi
 
 from db import *
+from axuilary_funcs import *
 
 
 class SelectedUser:
@@ -33,7 +34,14 @@ class MenuScreen(QMainWindow):
         self.submit_button.setIcon(QIcon('img/btn_submit.png'))
         self.submit_button.setIconSize(QSize(100, 100))
 
+        self.submit_button.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+        self.submit_button.clicked.connect(self.browse_folder)
+
         self.label.setFont(QFont('Default_SC', 35))
+
+    def browse_folder(self):
+        directory = QtWidgets.QFileDialog.getExistingDirectory(self, 'Выберите папку для сохранения файла')
+        create_excel_task_statistic(directory, menu_screen.task.currentText())
 
 
 class LoginScreen(QMainWindow):

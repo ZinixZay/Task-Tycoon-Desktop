@@ -1,4 +1,5 @@
 import psycopg2
+import json
 from config import *
 
 sql = psycopg2.connect(
@@ -53,3 +54,13 @@ def get_app_user_name(username: str) -> str:
     com = f"SELECT name FROM app_users WHERE login=('{username}')"
     cur.execute(com)
     return cur.fetchone()[0]
+
+
+def get_answers(title: str) -> dict:
+    cur.execute(f"SELECT answers FROM variants WHERE var_name=('{title}')")
+    return cur.fetchone()[0]
+
+
+def get_persons_answers(title: str) -> list:
+    cur.execute(f"SELECT person, result FROM answers WHERE var_name=('{title}')")
+    return cur.fetchall()
